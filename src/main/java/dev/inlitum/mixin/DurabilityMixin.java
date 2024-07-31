@@ -9,6 +9,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -50,7 +51,7 @@ public class DurabilityMixin {
             int k;
             int l;
             if (stack.isItemBarVisible()) {
-                int maxDamage = stack.getItem().getMaxDamage();
+                int maxDamage = ((ToolItem)stack.getItem()).getMaterial().getDurability();
                 int currentDamage = stack.getDamage();
 
                 int percentage = (int)Math.round((1 - (double)currentDamage / (double)maxDamage) * (double) 100);
@@ -82,7 +83,7 @@ public class DurabilityMixin {
             }
 
             ClientPlayerEntity clientPlayerEntity = this.client.player;
-            float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(), this.client.getTickDelta());
+            float f = clientPlayerEntity == null ? 0.0F : clientPlayerEntity.getItemCooldownManager().getCooldownProgress(stack.getItem(), this.client.getRenderTickCounter().getTickDelta(true));
             if (f > 0.0F) {
                 k = y + MathHelper.floor(16.0F * (1.0F - f));
                 l = k + MathHelper.ceil(16.0F * f);
