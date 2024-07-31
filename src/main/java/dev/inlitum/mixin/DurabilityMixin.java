@@ -34,8 +34,6 @@ public class DurabilityMixin {
             )
     )
     private void fill (DrawContext instance, RenderLayer layer,  int x1, int y1, int x2, int y2, int color) {
-        // DO NOTHING AT ALL!
-        // This will prevent the durability bar from displaying
         if (!DuraView.config.enabled) {
             instance.fill(layer, x1, y1, x2, y2, color);
         }
