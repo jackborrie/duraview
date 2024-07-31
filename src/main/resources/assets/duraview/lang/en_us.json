@@ -1,5 +1,6 @@
 {
   "text.autoconfig.duraview.title": "DuraView",
+  "text.autoconfig.duraview.option.enabled": "Enables or disables the mod.",
   "text.autoconfig.duraview.option.displayAbove": "Display durability above tool?",
   "text.autoconfig.duraview.tooltip.displayAbove": "Display durability above tool?"
 }
