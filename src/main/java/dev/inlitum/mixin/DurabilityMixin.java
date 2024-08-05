@@ -56,17 +56,22 @@ public class DurabilityMixin {
             return;
         }
 
-        DrawContext thisObject = (DrawContext)(Object)this;
+        DrawContext drawContext = (DrawContext)(Object)this;
 
         int maxDamage = stack.getMaxDamage();
         int currentDamage = stack.getDamage();
 
-        int percentage = (int)Math.round((1 - (double)currentDamage / (double)maxDamage) * (double) 100);
-
-        if (percentage < 100) {
+        if (maxDamage != currentDamage) {
             int color = stack.getItemBarColor();
 
-            int stringWidth = textRenderer.getWidth(String.valueOf(percentage));
+            String text;
+
+            if (DuraView.config.showAsPercentage) {
+                int percentage = (int)Math.round((1 - (double)currentDamage / (double)maxDamage) * (double) 100);
+                text = percentage + "%";
+            } else {
+                text = String.valueOf(maxDamage - currentDamage);
+            }
 
             boolean displayAbove = DuraView.config.displayAbove;
 
@@ -75,6 +80,7 @@ public class DurabilityMixin {
                 xPos = (x * 2) + 2;
                 yPos = (y * 2) + 2;
             } else {
+                int stringWidth = textRenderer.getWidth(text) - 1;
                 xPos = ((x + 8) * 2 + 1 + stringWidth / 2 - stringWidth);
                 yPos = (y * 2) + 22;
             }
@@ -82,7 +88,9 @@ public class DurabilityMixin {
             this.matrices.push();
             this.matrices.scale(0.5F, 0.5F, 0.5F);
             this.matrices.translate(0.0F, 0.0F, 399.0F);
-            thisObject.drawTextWithShadow(textRenderer, percentage + "%", xPos, yPos, color);
+
+            drawContext.drawTextWithShadow(textRenderer, text, xPos, yPos, color);
+            
             this.matrices.scale(2.0F, 2.0F, 2.0F);
             this.matrices.translate(0.0F, 0.0F, 200.0F);
             this.matrices.pop();
