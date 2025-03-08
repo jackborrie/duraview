@@ -23,27 +23,23 @@ public class DurabilityMixin {
     private MatrixStack matrices;
 
     @Redirect(
-            method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", 
+            method = "drawItemBar",
             at = @At( 
                     value = "INVOKE", 
-                    target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIII)V"
-            ),
-            slice = @Slice (
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItemBarStep()I"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;floor(F)I")
+                    target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIIII)V"
             )
     )
-    private void fill (DrawContext instance, RenderLayer layer,  int x1, int y1, int x2, int y2, int color) {
+    private void fill (DrawContext instance, RenderLayer layer, int x1, int y1, int x2, int y2, int z, int color) {
         if (!DuraView.config.enabled) {
             instance.fill(layer, x1, y1, x2, y2, color);
         }
     }
     
     @Inject(
-            method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
+            method = "drawStackOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;getItemBarColor()I",
+                    target = "Lnet/minecraft/client/gui/DrawContext;drawStackCount(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V",
                     shift = At.Shift.AFTER
             )
     )
